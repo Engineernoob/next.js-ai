@@ -12,13 +12,14 @@ CORS(app)
 @app.route('/api/assistant', methods=['POST'])
 def assistant():
            data = request.json
-           # Initialize a Hugging Face pipeline
-           sentiment_analysis = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+           # Initialize a Hugging Face pipeline with DialoGPT
+           chatbot = pipeline("text-generation", model="microsoft/DialoGPT-medium")
            
            # Example usage of the pipeline
-           analysis = sentiment_analysis("I love using Hugging Face!")
+           user_input = data.get("message", "Hello!")
+           chat_response = chatbot(user_input, max_length=100, num_return_sequences=1)
            
-           response = {"message": f"Sentiment analysis result: {analysis}"}
+           response = {"message": chat_response[0]['generated_text']}
            return jsonify(response)
       
 if __name__ == '__main__':
