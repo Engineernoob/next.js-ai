@@ -12,8 +12,13 @@ CORS(app)
 @app.route('/api/assistant', methods=['POST'])
 def assistant():
            data = request.json
-           # Process data and interact with OpenAI API
-           response = {"message": "Hello from Flask!"}
+           # Initialize a Hugging Face pipeline
+           sentiment_analysis = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+           
+           # Example usage of the pipeline
+           analysis = sentiment_analysis("I love using Hugging Face!")
+           
+           response = {"message": f"Sentiment analysis result: {analysis}"}
            return jsonify(response)
       
 if __name__ == '__main__':
